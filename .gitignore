@@ -1,0 +1,25 @@
+# Ignore snapshot files (generated content)
+**/snap-*.md
+**/snap-*.txt
+
+# Ignore date folders (they contain generated snapshots)
+Sat-*/
+Mon-*/
+Tue-*/
+Wed-*/
+Thu-*/
+Fri-*/
+Sun-*/
+
+# Node modules (if any)
+node_modules/
+
+# npm debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
