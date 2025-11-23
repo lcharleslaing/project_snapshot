@@ -1,6 +1,6 @@
 {
   "name": "project-snapshots",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Create complete project snapshots with file trees and contents, excluding gitignored files",
   "main": "snap.js",
   "files": [

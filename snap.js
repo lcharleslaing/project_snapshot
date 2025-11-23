@@ -11,37 +11,27 @@ const path = require('path');
 
 /**
  * Find the project root directory
- * If running from node_modules (installed package), finds the project root
- * If running locally, uses parent of snapshots directory
+ * Starts from the current working directory and walks upward
+ * to find a directory containing package.json
+ * If no package.json is found, returns the current working directory
  */
 function findProjectRoot() {
-  let currentDir = __dirname;
+  let currentDir = process.cwd();
   
-  // Check if we're running from node_modules (installed package)
-  if (currentDir.includes('node_modules')) {
-    // First, walk up until we're out of node_modules
-    while (currentDir.includes('node_modules')) {
-      currentDir = path.dirname(currentDir);
-      if (currentDir === path.dirname(currentDir)) {
-        // Reached filesystem root, fallback
-        break;
-      }
+  while (true) {
+    const pkgPath = path.join(currentDir, 'package.json');
+    if (fs.existsSync(pkgPath)) {
+      return currentDir;
     }
-    // Now walk up to find the project root (directory with package.json)
-    while (currentDir !== path.dirname(currentDir)) {
-      const packageJsonPath = path.join(currentDir, 'package.json');
-      if (fs.existsSync(packageJsonPath)) {
-        return currentDir;
-      }
-      currentDir = path.dirname(currentDir);
+    
+    const parentDir = path.dirname(currentDir);
+    if (parentDir === currentDir) {
+      // Reached filesystem root, no package.json found
+      return process.cwd();
     }
-  } else {
-    // Running locally - project root is parent of snapshots directory
-    return path.resolve(__dirname, '..');
+    
+    currentDir = parentDir;
   }
-  
-  // Fallback: use current working directory
-  return process.cwd();
 }
 
 const PROJECT_ROOT = findProjectRoot();
